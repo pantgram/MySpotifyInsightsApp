@@ -1,0 +1,8 @@
+app/.env
+app/db.sqlite3
+app/app/__pycache__
+app/currentPlayback/__pycache__
+app/signup_with_spotify/__pycache__
+app/topArtists/__pycache__
+app/topGenres/__pycache__
+app/topTracks/__pycache__

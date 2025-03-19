@@ -3,17 +3,20 @@ from spotipy.oauth2 import SpotifyOAuth
 from spotipy.cache_handler import DjangoSessionCacheHandler
 from dotenv import load_dotenv 
 from django.http import HttpResponse,JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 load_dotenv()
 scope = "user-library-read playlist-read-private user-library-modify user-read-recently-played user-top-read playlist-modify-public playlist-modify-private app-remote-control user-modify-playback-state"
 
 
-
+@api_view(['GET'])
 def index(request):
-    return HttpResponse("Specify a time range")
+    return Response("Specify a time range")
 
+@api_view(['GET'])
 def in_time_range(request,range):
-    sp = spotipy.Spotify(auth=request.session['token_info']['access_token'])
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope,cache_handler=DjangoSessionCacheHandler(request)))
     view_table=[]
     results_table= sp.current_user_top_tracks(limit=20, offset=0, time_range=range)
 
@@ -33,8 +36,7 @@ def in_time_range(request,range):
             'year': album_release_date
         }
         view_table.append(track_data)
-    json_table = json.dumps(view_table)
-    return HttpResponse(json_table)
+    return Response(view_table)
 
     
 

@@ -1,9 +1,5 @@
 app/.env
 app/db.sqlite3
-app/app/__pycache__
-app/api/currentPlayback/__pycache__
-app/signup_with_spotify/__pycache__
-app/api/topArtists/__pycache__
-app/api/topGenres/__pycache__
-app/api/topTracks/__pycache__
-app/api/currentPlayback/__pycache__/views.cpython-313.pyc
+__pycache__/
+*.py[cod]
+*$py.class

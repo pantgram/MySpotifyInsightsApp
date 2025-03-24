@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'signup_with_spotify',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'api'
 ]
 

@@ -22,4 +22,5 @@ urlpatterns = [
     path('topArtists/',include("api.topArtists.urls")),
     path('topGenres/',include("api.topGenres.urls")),
     path('currentPlayback/',include("api.currentPlayback.urls")),
+    path('auth/',include("api.signup_with_spotify.urls")),
 ]

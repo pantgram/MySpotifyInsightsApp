@@ -20,7 +20,6 @@ from django.urls import include,path
 urlpatterns = [
     path('topTracks/',include("api.topTracks.urls")),
     path('topArtists/',include("api.topArtists.urls")),
-    path('topGenres/',include("api.topGenres.urls")),
     path('currentPlayback/',include("api.currentPlayback.urls")),
     path('',include("api.signup_with_spotify.urls")),
 ]

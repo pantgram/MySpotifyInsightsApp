@@ -1,21 +1,21 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from spotipy.cache_handler import DjangoSessionCacheHandler
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from dotenv import load_dotenv 
-from django.http import HttpResponse,JsonResponse
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from api.spotify_utils import get_spotify_client_for_user
 load_dotenv()
 scope = "user-library-read playlist-read-private user-library-modify user-read-recently-played user-top-read playlist-modify-public playlist-modify-private app-remote-control user-modify-playback-state"
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def index(request):
     return Response("Specify a time range")
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def in_time_range(request,range):
-    sp = spotipy.Spotify(auth=request.session['token_info']['access_token'])
+    sp = get_spotify_client_for_user(request.user)
     results_table= sp.current_user_top_artists(limit=20, offset=0, time_range=range)
     view_table = []
     for artist_info in results_table['items']:

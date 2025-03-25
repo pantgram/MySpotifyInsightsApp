@@ -1,40 +1,21 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from spotipy.cache_handler import DjangoSessionCacheHandler
-from dotenv import load_dotenv 
-from django.http import HttpResponse,JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-load_dotenv()
-scope = "user-library-read playlist-read-private user-library-modify user-read-recently-played user-top-read playlist-modify-public playlist-modify-private app-remote-control user-modify-playback-state"
-
+from api.spotify_utils import get_spotify_client_for_user
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def index(request):
-    return Response("Specify a time range")
-
-@api_view(['GET'])
-def in_time_range(request,range):
-    sp = spotipy.Spotify(auth=request.session['token_info']['access_token'])
-    results_table= sp.current_user_top_artists(limit=20, offset=0, time_range=range)
-    view_table = []
-    for artist_info in results_table['items']:
-        artist_name = artist_info['name']
-        artist_genres = artist_info['genres']
-        artist_id = artist_info['id']
-        uri = artist_info['uri']
-        popularity = artist_info['popularity']
-        artist_data = {
-            'artists_name': artist_name,
-            'artist_id': artist_id,
-            'uri': uri,
-            'genres': artist_genres,
-            'popularity': popularity,
-        }
-        view_table.append(artist_data)
-    return Response(view_table)
-
-    
-
-
-
+    """
+    Fetch the authenticated user's Spotify playlists
+    """
+    try:
+        # Get Spotify client for the authenticated user
+        sp = get_spotify_client_for_user(request.user)
+        
+        # Get playlists
+        playlists = sp.current_user_playlists()
+        
+        return Response(playlists)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

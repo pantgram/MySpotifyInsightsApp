@@ -1,12 +1,14 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from . import views
+from .views import SpotifyAuthView, UserProfileView
 
 urlpatterns = [
-    # Spotify auth endpoints
-    path('spotify/', views.spotify_auth, name='spotify_auth'),
-    path('spotify/callback/', views.spotify_callback, name='spotify_callback'),
+    # Spotify auth endpoint
+    path('auth/spotify/', SpotifyAuthView.as_view(), name='spotify_auth'),
     
     # JWT refresh endpoint
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # User profile endpoint
+    path('users/me/', UserProfileView.as_view(), name='user_profile'),
 ]
